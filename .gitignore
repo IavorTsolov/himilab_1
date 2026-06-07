@@ -1,0 +1,33 @@
+# Operating System files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+
+# IDEs and Code Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.project
+.settings/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Future-proofing: Node & Dependency directories (if you use packages or bundlers later)
+node_modules/
+dist/
+build/
+out/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
