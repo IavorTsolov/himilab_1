@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ХимиЛаб · Виртуална химична лаборатория 5–10 клас</title>
+  <meta name="description" content="Интерактивна виртуална лаборатория по химия за 5–10 клас с периодична таблица на елементите, симулации на реакции, екологични опити и AI химик на български.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css?v=1.1">
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <nav>
+    <div class="logo">
+      <div class="flask">⚗️</div>
+      <div>ХимиЛаб<small>Виртуална лаборатория</small></div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-view="home">🏠 Начало</button>
+      <button class="tab" data-view="lab">⚗️ Лаборатория</button>
+      <button class="tab" data-view="ptable">🧪 Таблица</button>
+      <button class="tab" data-view="grades">📚 Класове 5–10</button>
+      <button class="tab" data-view="eco">🌍 Екология</button>
+      <button class="tab" data-view="ai">🤖 AI Химик</button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===================== HOME ===================== -->
+<section class="view active" id="home">
+  <div class="hero">
+    <div>
+      <span class="section-head eyebrow" style="margin-bottom:18px">За ученици и учители · 5–10 клас</span>
+      <h1>Химията <span class="grad">оживява</span><br>пред очите ти</h1>
+      <p>Интерактивна лаборатория, в която смесваш реактиви, гледаш как се образуват утайки, изскача газ и пламъкът променя веществата — безопасно, красиво и с вграден AI помощник, който обяснява всяка реакция.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="go('lab')">⚗️ Влез в лабораторията</button>
+        <button class="btn btn-ghost" onclick="go('ai')">🤖 Питай AI Химик</button>
+      </div>
+      <div class="hero-stats">
+        <div><span>118</span><small>химични елемента</small></div>
+        <div><span>20+</span><small>реакции на живо</small></div>
+        <div><span>6</span><small>класа учебно съдържание</small></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit o1"><div class="electron"></div></div>
+      <div class="orbit o2"><div class="electron"></div></div>
+      <div class="orbit o3"><div class="electron"></div></div>
+      <div class="nucleus">⚛</div>
+    </div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="card feature" onclick="go('lab')">
+      <div class="ic">🧫</div><h3>Виртуална лаборатория</h3>
+      <p>Смесвай киселини, основи и соли. Виж цветни разтвори, утайки, газове и реакции при загряване.</p>
+    </div>
+    <div class="card feature" onclick="go('ptable')">
+      <div class="ic">🔬</div><h3>Жива периодична таблица</h3>
+      <p>Кликни върху всеки елемент за свойства, 3D модел на атома и обяснение от AI.</p>
+    </div>
+    <div class="card feature" onclick="go('grades')">
+      <div class="ic">📖</div><h3>По учебна програма</h3>
+      <p>Теми и експерименти, подредени за 5, 6, 7, 8, 9 и 10 клас.</p>
+    </div>
+    <div class="card feature" onclick="go('eco')">
+      <div class="ic">🌱</div><h3>Опазване на средата</h3>
+      <p>Симулации на парников ефект, киселинни дъждове и пречистване на вода.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="view" id="lab">
+  <div class="section-head">
+    <span class="eyebrow">Виртуална лаборатория</span>
+    <h2>Лабораторна маса</h2>
+    <p>Избери два реактива от рафта вляво, после натисни „Пусни реакцията". Можеш да загрееш сместа с горелката, за да видиш реакции при нагряване.</p>
+  </div>
+
+  <div class="lab-grid">
+    <!-- shelf -->
+    <div class="card shelf">
+      <h3>🧴 Рафт с реактиви</h3>
+      <p class="hint">🖐️ Влачи реактив към чашата (или просто кликни) · макс. 2</p>
+      <div class="reagents" id="reagents"></div>
+    </div>
+
+    <!-- bench -->
+    <div class="card bench">
+      <div class="bench-top">
+        <h3 id="benchTitle">⚗️ Реакционна чаша</h3>
+        <div class="thermo">🌡️ <div class="bar"><div class="fill" id="tempFill"></div></div> <span id="tempVal">20°C</span></div>
+      </div>
+      <div class="stage">
+        <div class="stage-floor"></div>
+        <div class="tripod" id="tripod"></div>
+        <div class="beaker-wrap">
+          <div class="beaker" id="beaker">
+            <div class="lip"></div>
+            <div class="glow" id="glow"></div>
+            <div class="liquid" id="liquid"></div>
+            <div class="swirl" id="swirl"></div>
+          </div>
+        </div>
+        <div class="burner" id="burner">
+          <div class="flame"><div class="f-outer"></div><div class="f-inner"></div></div>
+          <div class="base"></div>
+        </div>
+      </div>
+      <div class="readout">
+        <div class="reaction-name" id="rName"></div>
+        <div class="equation" id="rEq">Чашата е празна — добави реактиви ↖</div>
+        <div class="reaction-desc" id="rDesc"></div>
+        <div class="tags" id="rTags"></div>
+      </div>
+    </div>
+
+    <!-- side -->
+    <div class="lab-side">
+      <div class="card mix-panel">
+        <h3>В чашата</h3>
+        <div class="slots">
+          <div class="slot" id="slot0"><span>празно</span></div>
+          <div class="plus">+</div>
+          <div class="slot" id="slot1"><span>празно</span></div>
+        </div>
+        <div class="lab-actions">
+          <button class="btn btn-primary" id="reactBtn" onclick="runReaction()" disabled>▶ Пусни реакцията</button>
+          <button class="btn btn-warm" id="heatBtn" onclick="toggleHeat()" disabled>🔥 Загрей</button>
+          <button class="btn btn-ghost" onclick="clearBeaker()">↺ Изчисти чашата</button>
+        </div>
+      </div>
+      <div class="card suggest">
+        <h4>💡 Пробвай тези</h4>
+        <button onclick="quickMix('CuSO4','NaOH')">Син камък + сода каустик → синя утайка</button>
+        <button onclick="quickMix('AgNO3','NaCl')">Сребърен нитрат + сол → бяла утайка</button>
+        <button onclick="quickMix('HCl','Zn')">Солна киселина + цинк → водород ↑</button>
+        <button onclick="quickMix('vinegar','soda')">Оцет + сода → вулкан от CO₂</button>
+        <button onclick="quickMix('HCl','NaOH')">Киселина + основа → неутрализация</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PERIODIC TABLE ===================== -->
+<section class="view" id="ptable">
+  <div class="section-head">
+    <span class="eyebrow">Периодична система на елементите</span>
+    <h2>Периодична таблица</h2>
+    <p>Кликни върху елемент, за да видиш свойствата му и 3D модел на атома. Филтрирай по групи, за да разбереш кои елементи имат подобни свойства.</p>
+  </div>
+
+  <!-- Search & filters toolbar -->
+  <div class="pt-toolbar">
+    <div class="pt-search-wrap">
+      <span class="pt-search-icon">🔍</span>
+      <input type="search" id="elementSearchInput" placeholder="Търси елемент по символ, име или номер..." autocomplete="off" spellcheck="false">
+    </div>
+    <div class="pt-controls" id="ptFilters"></div>
+  </div>
+
+  <!-- Scrollable table wrapper -->
+  <div class="ptable-wrapper">
+    <div class="ptable" id="ptableGrid"></div>
+  </div>
+
+  <!-- Legend row labels -->
+  <div class="pt-legend">
+    <span class="legend-label" style="grid-column:1;text-align:right">Лантаноиди</span>
+    <span class="legend-label" style="grid-column:2">→ Ред 9</span>
+    <span class="legend-label" style="grid-column:4;text-align:right">Актиноиди</span>
+    <span class="legend-label" style="grid-column:5">→ Ред 10</span>
+  </div>
+</section>
+
+<!-- ===================== GRADES ===================== -->
+<section class="view" id="grades">
+  <div class="section-head">
+    <span class="eyebrow">Учебно съдържание</span>
+    <h2>Химия от 5 до 10 клас</h2>
+    <p>Темите следват българската учебна програма по „Човекът и природата" и „Химия и опазване на околната среда". Всеки клас има препоръчани опити, които можеш да направиш в лабораторията.</p>
+  </div>
+  <div class="grade-grid" id="gradeGrid"></div>
+</section>
+
+<!-- ===================== ECO ===================== -->
+<section class="view" id="eco">
+  <div class="section-head">
+    <span class="eyebrow">Раздел екология</span>
+    <h2>Опазване на околната среда</h2>
+    <p>Химията обяснява и проблемите на природата. Поиграй със симулациите, за да видиш как човешката дейност променя въздуха, водата и скалите.</p>
+  </div>
+
+  <div class="card eco-hero">
+    <div>
+      <h3>🌍 Защо химията е важна за планетата?</h3>
+      <p>Парниковите газове, киселинните дъждове, замърсяването на водите и разграждането на пластмасите — всичко това са химични процеси. Като ги разбираме, можем да ги решим.</p>
+    </div>
+    <div class="eco-leaf">🌿</div>
+  </div>
+
+  <div class="eco-grid">
+    <!-- greenhouse -->
+    <div class="card eco-tool">
+      <h3>🏭 Парников ефект</h3>
+      <p class="d">Виж как повече CO₂ в атмосферата задържа топлина и повишава температурата.</p>
+      <div class="slider-row">
+        <label>Концентрация на CO₂ <b><span id="co2Val">420</span> ppm</b></label>
+        <input type="range" id="co2Slider" min="280" max="900" value="420" oninput="updGreenhouse()">
+      </div>
+      <div class="gh-vis" id="ghVis">
+        <div class="gh-sun"></div>
+        <div class="gh-temp" id="ghTemp">15°C</div>
+        <div class="gh-ground"></div>
+      </div>
+    </div>
+
+    <!-- acid rain -->
+    <div class="card eco-tool">
+      <h3>🌧️ Киселинен дъжд</h3>
+      <p class="d">Серните и азотните оксиди правят дъжда кисел. Виж как разяжда мрамора (CaCO₃).</p>
+      <div class="slider-row">
+        <label>pH на дъжда <b><span id="phVal">5.6</span></b></label>
+        <input type="range" id="phSlider" min="20" max="70" value="56" oninput="updRain()">
+      </div>
+      <div class="rain-vis" id="rainVis">
+        <div class="ph-readout">pH <b id="rainPh">5.6</b></div>
+        <div class="marble" id="marble"></div>
+      </div>
+    </div>
+
+    <!-- water filter -->
+    <div class="card eco-tool">
+      <h3>💧 Пречистване на вода</h3>
+      <p class="d">Мръсната вода минава през филтър от пясък и активен въглен и излиза чиста.</p>
+      <div class="filter-vis">
+        <div class="water-glass"><div class="w" id="dirtyW" style="background:#6b5a3a"></div><small>замърсена</small></div>
+        <div class="fil-arrow">→</div>
+        <div class="water-glass"><div class="w" id="cleanW" style="background:#2a4a6e"></div><small>пречистена</small></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:26px" onclick="filterWater()">▶ Пусни през филтъра</button>
+    </div>
+  </div>
+
+  <!-- quiz -->
+  <div class="card quiz">
+    <h3>🧠 Бърз тест: екология и химия</h3>
+    <div class="q-question" id="qText"></div>
+    <div class="q-opts" id="qOpts"></div>
+    <div class="q-feedback" id="qFeedback"></div>
+    <button class="btn btn-ghost" id="qNext" style="margin-top:14px;display:none" onclick="nextQuiz()">Следващ въпрос →</button>
+  </div>
+</section>
+
+<!-- ===================== AI ===================== -->
+<section class="view" id="ai">
+  <div class="section-head">
+    <span class="eyebrow">Вграден изкуствен интелект</span>
+    <h2>AI Химик</h2>
+    <p>Личен помощник по химия за ученици и учители. Обяснява реакции, помага с домашни, генерира тестове и идеи за уроци.</p>
+  </div>
+  <div class="ai-wrap">
+    <div class="card chat">
+      <div class="chat-hd">
+        <div class="av">🧑‍🔬</div>
+        <div><h3>Проф. Реактив</h3><small id="aiStatus">● онлайн · отговаря на български</small></div>
+        <div class="pulse"></div>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Напиши въпрос по химия..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button id="sendBtn" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+    <div class="ai-side">
+      <div class="card">
+        <h4>Кой си ти?</h4>
+        <div class="role-toggle" id="roleToggle">
+          <button class="active" data-role="student">👩‍🎓 Ученик</button>
+          <button data-role="teacher">👨‍🏫 Учител</button>
+        </div>
+        <p class="sub" style="font-size:.78rem" id="roleHint">Обясненията ще са опростени и подходящи за твоята възраст.</p>
+      </div>
+      <div class="card">
+        <h4>Бързи въпроси</h4>
+        <div id="quickQs"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== ELEMENT MODAL ===================== -->
+<div class="modal" id="elModal">
+  <div class="card modal-card">
+    <button class="close-x" onclick="closeModal()">✕</button>
+    <div class="modal-hd">
+      <div class="big" id="mBig">
+        <span class="s" id="mSym"></span>
+        <span class="n" id="mNum"></span>
+      </div>
+      <div>
+        <h2 id="mName"></h2>
+        <div class="cat" id="mCat"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-body-left">
+        <div class="prop-grid">
+          <div class="prop"><small>Ат. маса</small><b id="mMass"></b></div>
+          <div class="prop"><small>Група</small><b id="mGroup"></b></div>
+          <div class="prop"><small>Период</small><b id="mPeriod"></b></div>
+        </div>
+        <p id="mDesc"></p>
+        <div class="uses" id="mUses"></div>
+        <button class="btn btn-primary ask-ai-el" onclick="askAboutElement()">🤖 Питай AI за този елемент</button>
+      </div>
+      <div class="modal-body-right">
+        <!-- 3D Atom Viewer -->
+        <div class="atom-viewer-wrap">
+          <div id="atom3dCanvas" class="atom-3d-canvas"></div>
+          <div class="atom-controls">
+            <button id="atomPauseBtn" class="btn btn-ghost btn-sm">⏸ Пауза</button>
+            <button id="atomResetBtn" class="btn btn-ghost btn-sm">↺ Нулирай</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <p><b>ХимиЛаб</b> — образователна виртуална лаборатория по химия и опазване на околната среда · 5–10 клас.<br>
+  Симулациите са опростени за учебни цели. Винаги извършвай реални опити само под надзор на учител. 🧑‍🔬</p>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<!-- Three.js for 3D atom model -->
+<script src="js/three-bundled.js"></script>
+
+<!-- App data (ELEMENTS, CATS, ELDETAIL, REAGENTS, REACTIONS, GRADES, QUIZ, QUICKQS) -->
+<script src="js/data.js"></script>
+
+<!-- 3D atom renderer — must come after Three.js -->
+<script src="js/three-atom.js"></script>
+
+<!-- Core router — defines go() -->
+<script src="js/app.js"></script>
+
+<!-- Lab engine -->
+<script src="js/lab.js"></script>
+
+<!-- Ecology simulations -->
+<script src="js/ecology.js"></script>
+
+<!-- AI chat -->
+<script src="js/ai.js"></script>
+
+<!-- Periodic table — must come after data.js -->
+<script src="js/ptable.js"></script>
+
+<!-- Grade cards renderer & modal close on backdrop -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Render grade cards
+    const gradeGrid = document.getElementById('gradeGrid');
+    if (gradeGrid && typeof GRADES !== 'undefined') {
+      GRADES.forEach(g => {
+        gradeGrid.innerHTML += `
+          <div class="card grade-card">
+            <div class="gnum">${g.g}</div>
+            <h3 class="grade-title">Клас</h3>
+            <div class="age">${g.age}</div>
+            <ul>${g.topics.map(t => `<li>${t}</li>`).join('')}</ul>
+            <div class="exp"><b>Опит:</b> ${g.exp}</div>
+          </div>`;
+      });
+    }
+
+    // Ensure modal-body uses flex layout
+    const applyFlexLayout = () => {
+      const modalBody = document.querySelector('.modal-body');
+      if (modalBody) {
+        modalBody.style.display = 'flex';
+        modalBody.style.flex = '1';
+        modalBody.style.overflow = 'hidden';
+      }
+    };
+
+    // Apply immediately
+    applyFlexLayout();
+
+    // Also apply when modal opens (watch for modal additions)
+    const observer = new MutationObserver(applyFlexLayout);
+    const modal = document.querySelector('.modal-body');
+    if (modal && modal.parentElement) {
+      observer.observe(modal.parentElement, { childList: true, subtree: true });
+    }
+  });
+</script>
+
+</body>
+</html>
